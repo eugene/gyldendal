@@ -11,4 +11,9 @@ for element in df['context.extensions.viewedPages']:
     # print(re.search(r"/:/", element))
 
 # pages
-plt.hist(pages, 500, normed=1, facecolor='green', alpha=0.75)
+plt.hist(pages, len(np.unique(pages)), facecolor='blue', normed=1, alpha=0.75)
+plt.xlabel('Page #')
+plt.ylabel('Frequency')
+plt.title(r'Most read pages')
+plt.grid(True)
+plt.show()
