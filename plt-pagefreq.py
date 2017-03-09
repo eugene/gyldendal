@@ -3,6 +3,7 @@ import re
 import json
 import sys
 import matplotlib.pyplot as plt
+import numpy as np
 
 df = pandas.read_csv('data/ReadingPattern.csv')
 pages = []
