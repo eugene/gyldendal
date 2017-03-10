@@ -13,6 +13,7 @@ for f in df2['/*']:
 	if len(f) > 52:
 		uniqueusers.append(f.rstrip(','))
 
+
 #Translate hash to a readable user number
 hashtouser = []
 for k in df['UserID']:
@@ -20,7 +21,6 @@ for k in df['UserID']:
 
 df['UserID'] = hashtouser
  
-
 TA = df['TaskAnswers']
 
 answers = []
