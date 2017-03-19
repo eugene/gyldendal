@@ -45,6 +45,7 @@ print(df.head())
 
 
 try:
+	print(sys.argv[1])
 	if sys.argv[1] == "debug":
 		import IPython
 		IPython.embed()
