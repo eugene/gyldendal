@@ -56,12 +56,9 @@ while True:
 
 	index = similarities.MatrixSimilarity(lsi[corpus]) # transform corpus to LSI space and index it
 
-	index.save('/tmp/deerwester.index')
-	index = similarities.MatrixSimilarity.load('/tmp/deerwester.index')
-
 	sims = index[vec_lsi] # perform a similarity query against the corpus
 	#print(list(enumerate(sims))) # print (document_number, document_similarity) 2-tuples
 	sims = sorted(enumerate(sims), key=lambda item: -item[1])
 	#pprint(sims) # print sorted (document number, similarity score) 2-tuples
 	for i in range(5): #number of suggestions to print
-		print(str(+1),': % ', str(sims[i][1]), ' ', documents[sims[i][0]],sep='')
+		print(str(i+1),': % ', str(sims[i][1]), ' ', documents[sims[i][0]],sep='')
