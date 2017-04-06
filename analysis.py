@@ -31,7 +31,7 @@ from gensim import corpora, models, similarities
 dictionary = corpora.Dictionary.load('/tmp/tmm.dict')
 corpus = corpora.MmCorpus('/tmp/tmm.mm') # comes from the first tutorial, "From strings to vectors"
 
-lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=6)
+lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=12)
 
 doc = "Eleven kan anvende grafiske modeller"
 vec_bow = dictionary.doc2bow(doc.lower().split())
@@ -45,7 +45,7 @@ index = similarities.MatrixSimilarity.load('/tmp/deerwester.index')
 sims = index[vec_lsi] # perform a similarity query against the corpus
 #print(list(enumerate(sims))) # print (document_number, document_similarity) 2-tuples
 sims = sorted(enumerate(sims), key=lambda item: -item[1])
-pprint(sims) # print sorted (document number, similarity score) 2-tuples
+#pprint(sims) # print sorted (document number, similarity score) 2-tuples
 
 while True:
 	doc = input('Skriv læringsmål, skriv q for at afslutte: ')
