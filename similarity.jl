@@ -4,11 +4,11 @@ dbfilename = "word_vectors_.sqlite"
 isfile(dbfilename) || error("Could not find database file")
 db = SQLite.DB(dbfilename)
 
-laeringsmaal = "fortælle, hvornår en bestemt slags mad og måder at spise på var almindelige"
+laeringsmaal = "anbringe eksempler på børnearbejde tidsmæssigt i forhold til hinanden"
 
-ffm1 = "Eleven kan placere elementer fra historien tidsmæssigt i forhold til hinanden. "
-ffm2 = "Eleven har viden om relativ kronologi"
-ffm3 = "Eleven har viden om særtræk ved historiske fortællinger"
+ffm1 = "placere elementer fra historien tidsmæssigt i forhold til hinanden relativ kronologi"
+ffm2 = "sammenligne tidlige tiders familie, slægt og fællesskaber med eget liv fællesskaber før og nu"
+ffm3 = "bruge historiske spor i lokalområdet til at fortælle om fortiden identifikation af historiske spor i lokalområdet"
 
 not_ffm = "Ukraine er i krig med rusland og Gandalf er meget sød"
 
@@ -42,7 +42,3 @@ println("FFM1($ffm2): $(cossim(x, y2))")
 println("FFM1($ffm3): $(cossim(x, y3))")
 
 println("NOT FFM($not_ffm): $(cossim(x, z3))")
-
-# cosine betweeen all combinations  
-# average distance between combinations
-
