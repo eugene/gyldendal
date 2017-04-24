@@ -1,8 +1,14 @@
 import fasttext
 import numpy as np 
-import IPython
+from IPython import embed
+import json
 from scipy import spatial
-model = fasttext.load_model('fasttext/wiki.da.bin')
+
+with open('34hist.json') as data_file:
+    data = json.load(data_file)
+
+
+#model = fasttext.load_model('fasttext/wiki.da.bin')
 
 færdighed = [
                 "Eleven kan placere elementer fra historien tidsmæssigt i forhold til hinanden",
@@ -37,8 +43,21 @@ viden = [
                 "Eleven har viden om personer og hændelser, der tillægges betydning i historien"
             ]
 
-færdighedvec = []
+correct = []
+for i in range(len(data)):
+    datapoint = data[str(i)]
+    text = datapoint['text']
+    mål = datapoint['færdighed'] + ' ' + datapoint['viden']
+    for i2, f in enumerate(færdighed):
+        if f == datapoint['færdighed']:
+            correct.append(i2)
+    if datapoint['færdighed'] not in færdighed:
+        print(datapoint['færdighed'])
+        print(' ')
+        correct.append(-1)
 
+embed()
+"""
 try:
     # Find vektorer til alle færdigheder
     for f in færdighed:
@@ -49,6 +68,6 @@ try:
     for f in færdighedvec:
         print(1 - spatial.distance.cosine(np.array(f), np.array(model[test])))
         
-
 except:
     IPython.embed()
+"""
