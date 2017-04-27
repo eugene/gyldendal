@@ -1,8 +1,12 @@
 import fasttext
 import numpy as np
-import pandas
+import pandas as pd
 import math
 import sys
+
+# Run with
+# $ ipython
+# [1] run -i fasttextclassify.py
 
 
 def cossim(a, b):
@@ -36,21 +40,25 @@ def getsuggestion(model, fftvecs):
     return (similarities_sorted, fftsuggestions)
 
 
+if 'model' not in vars():
+    path = "/Users/Jakob/Desktop/gyldendal/fastText/wiki.da/wiki.da.bin"
+    model = fasttext.load_model(path)
+
 # Number of suggestions
 n = 5
 
-# Load model
-modelpath = "fastText/wiki.da/wiki.da.bin"
-model = fasttext.load_model(modelpath)
-
 # Create list with FFMs
 path = 'FFM.json'
-data = pandas.read_json(path)
-ffts = []
+data = pd.read_json(path)
+ffts = dict()
 fftvecs = []
-for i in range(int(data.size / len(data))):
-    ffts.append(data[i]['færdighed'])
-    fftvecs.append(model[data[i]['færdighed']])
+for i in data.keys():  # fag
+    for j in data[i].keys():  # klassetrin
+        if type(data[i][j]) is dict:
+            ffts[(i, j) = data[i][j]
+
+
+"""
 
 #(similarities_sorted, fftsuggestions) = getsuggestion(model, fftvecs)
 # Take objective input
@@ -71,3 +79,4 @@ fftsuggestions = [x for (y, x) in sorted(
 
 for i in range(n):
     print(str(round(similarities_sorted[i], 4)) + "\t" + fftsuggestions[i])
+"""
