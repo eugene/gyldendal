@@ -3,6 +3,7 @@ import numpy as np
 from IPython import embed
 import json
 from scipy import spatial
+import matplotlib.pyplot as plt
 
 with open('34hist.json') as data_file:
     data = json.load(data_file)
@@ -43,6 +44,8 @@ viden = [
                 "Eleven har viden om personer og hændelser, der tillægges betydning i historien"
             ]
 
+
+
 correct = []
 for i in range(len(data)):
     datapoint = data[str(i)]
@@ -56,18 +59,62 @@ for i in range(len(data)):
         print(' ')
         correct.append(-1)
 
-embed()
-"""
-try:
-    # Find vektorer til alle færdigheder
-    for f in færdighed:
+#embed()
+
+færdighedvec = []
+#Find vektorer til alle færdigheder
+for f in færdighed:
         færdighedvec.append(model[f])
 
-    test = "placere eksempler på børnearbejde tidsmæssigt i forhold til hinanden"
 
-    for f in færdighedvec:
-        print(1 - spatial.distance.cosine(np.array(f), np.array(model[test])))
-        
-except:
-    IPython.embed()
-"""
+predict_correct = []
+predict_correct2 = []
+#Test al data for top 1 præcision
+TOP = 8
+for i in range(len(data)):
+    if correct[i] != -1:
+        datapoint = data[str(i)]
+        text = datapoint['text']
+        mål = datapoint['færdighed']
+
+        #Initialize array
+        best = 1000
+        dist_result = [ [], []  ]
+        for _ in range(TOP):
+            dist_result[0].append(1000)
+            dist_result[1].append('')
+        #print('Result = {}'.format(result))
+
+        for i2, f in enumerate(færdighedvec):
+            dist = spatial.distance.cosine(np.array(f), np.array(model[text]))
+            if dist < best:
+                result = færdighed[i2]
+                best = dist
+            if dist < max(dist_result[0]):
+                index = dist_result[0].index(max(dist_result[0]))
+                dist_result[0][index] = dist
+                dist_result[1][index] = færdighed[i2]
+
+
+        #print('Result = {}'.format(result))
+        #print('Mål = {}'.format(mål))
+        if result == mål:
+            predict_correct.append(1)
+        else:
+            predict_correct.append(0)
+
+        if mål in dist_result[1]:
+            predict_correct2.append(1)
+        else:
+            predict_correct2.append(0)
+
+print('Accuracy(TOP1) = ', np.mean(predict_correct)*100,'%')
+print('Accuracy(TOP{}) = '.format(TOP), np.mean(predict_correct2)*100,'%')
+
+plotti = [42.5, 56.16, 68.49, 73.97, 83.56, 90.41, 95.89]
+plt.plot(list(range(1,len(plotti)+1)),plotti)
+plt.grid()
+plt.xlabel(("TOP X"))
+plt.ylabel(("Accuracy"))
+plt.ylim([40,100])
+plt.show()
