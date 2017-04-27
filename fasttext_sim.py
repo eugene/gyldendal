@@ -2,9 +2,8 @@ import fasttext
 import json
 import numpy as np
 	
-path = "/Users/eugene/Git/fastText/models/wiki.da.bin"
-
 if not 'model' in vars():
+	path = "/Users/eugene/Git/fastText/models/wiki.da.bin"
 	model = fasttext.load_model(path)
 
 labeled = open('36hist.json', 'r').read()
@@ -14,7 +13,6 @@ def clean(string):
 	v = "eleven har viden om af alle alt andre at blev bliver bort da dag de dem den der deres det dig dog du efter eller en end er et far fik fin for forbi fordi frafri få gik glad godt ham han hanshar havde have hele hen hende her hjemhun hvad hver hvis hvor igen ikke indjeg jer jo kan kom kommer kun kunnelang lidt lige lille løb man mange medmeget men mere mig min mod mon måned nej noget nok nu når og ogsåom op os over på sagde se selvsidste sig sin sine skal skulle små somstor store så tid til tog ud undervar ved vi vil ville være været år"
 	stoplist = set(v.split())
 	return ' '.join([word for word in string.lower().split() if word not in stoplist]).replace(',', '')
-
 
 texts = []
 i = 0
