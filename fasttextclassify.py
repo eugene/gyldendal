@@ -55,7 +55,7 @@ fftvecs = []
 for i in data.keys():  # fag
     for j in data[i].keys():  # klassetrin
         if type(data[i][j]) is dict:
-            ffts[(i, j) = data[i][j]
+            print(data[i][j])
 
 
 """
