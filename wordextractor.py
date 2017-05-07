@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 with open('34hist.json') as data_file:
     data = json.load(data_file)
 
-
-#model = fasttext.load_model('fasttext/wiki.da.bin')
+if not 'model' in vars():
+    model = fasttext.load_model('fasttext/wiki.da.bin')
 
 færdighed = [
                 "Eleven kan placere elementer fra historien tidsmæssigt i forhold til hinanden",
