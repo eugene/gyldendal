@@ -5,6 +5,12 @@
 # 
 #  * Convert an iterator (like the one returned by map) to 
 #    an array: list(map(lambda n: n, [1,2,3])) or [*map(lambda n: n, [1,2,3])]
+#
+#
+# Spørgsmål til gruppen:
+# 
+#  * Hvorfor er summering af vektorerne så meget anderledes and den indbyggede metode 
+#    til at slå op i modellen? Eller måske er det fordi jeg fjerner "eleven har"?
 
 import fasttext
 import json
@@ -39,7 +45,7 @@ def clean(string):
 	       måned nej noget nok nu når og ogsåom op os over på sagde se selvsidste sig sin 
 	       sine skal skulle små somstor store så tid til tog ud undervar ved 
 	       vi vil ville være været år"""
-	       
+
 	stoplist = set(v.split())
 	return ' '.join([word for word in string.lower().split() if word not in stoplist]).replace(',', '')
 
