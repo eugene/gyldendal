@@ -6,6 +6,8 @@
 #  * Convert an iterator (like the one returned by map) to 
 #    an array: list(map(lambda n: n, [1,2,3])) or [*map(lambda n: n, [1,2,3])]
 #
+#  * Although a Dict with floats as keys appears sorted when printed, it is _NOT_
+#    sorted when iterating over it. Use OrderedDict!
 #
 # Spørgsmål til gruppen:
 # 
@@ -22,7 +24,10 @@ import string # for punctuation
 from scipy import spatial
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial.distance import cosine as cosine_distance
+from collections import OrderedDict
 import matplotlib.pyplot as plt
+
+# configuration
 	
 if not 'model' in vars():
 	path = "/Users/eugene/Git/fastText/models/wiki.da.bin"
@@ -54,27 +59,33 @@ def normalize(s):
         s = s.replace(p, '')
     s = s.replace(' ', '')
 
+
     return s.lower().strip()
+
+ffms = {}
+for ffm in read_ffms():
+	#text_vectors = list(map(lambda word: model[word], clean(ffm).split()))
+	ffms[ffm] = {
+		"text"   : ffm,
+		"vector" : model[clean(ffm)] #np.sum(text_vectors, axis=0)	
+	}
 
 texts = {}
 for key in labeled:
 	text          = labeled[key]["text"]
 	ffm_skill     = labeled[key]["færdighed"]
 	ffm_knowledge = labeled[key]["viden"]
-	text_vectors  = list(map(lambda word: model[word], clean(text).split()))
+
+	if ffm_skill not in list(ffms.keys()):
+		print("text: '", text, "' does not have a correct FFM. Skipped.")
+		continue
+
+	# text_vectors  = list(map(lambda word: model[word], clean(text).split()))
 	texts[text]   = {
 		"text"      : text,
 		"skill"     : ffm_skill,
 		"knowledge" : ffm_knowledge,
-		"vector"    : np.sum(text_vectors, axis=0)
-	}
-
-ffms = {}
-for ffm in read_ffms():
-	text_vectors = list(map(lambda word: model[word], clean(ffm).split()))
-	ffms[ffm] = {
-		"text"   : ffm,
-		"vector" : np.sum(text_vectors, axis=0)	
+		"vector"    : model[clean(text)] #np.sum(text_vectors, axis=0)
 	}
 
 for text, text_value in texts.items():
@@ -86,21 +97,22 @@ for text, text_value in texts.items():
 			"ffm": ffm_text,
 			"match": (normalize(text_value["skill"]) == normalize(ffm_text))
 		}
-		
-# calculating accuracy
-def accuracy_plot():
-	accuracy = []
-	for i in range(len(ffms)):
-		a = 0
-		for text_key, text_value in texts.items():
-			m = [v["match"] for v in text_value["distance"].values()]
-			a += np.sum(m[0:(i+1)])
-		accuracy.append(a / len(texts))
-	
-	plt.plot(range(len(ffms)), accuracy)
+
+offline_accuracy = []
+for i in range(len(ffms)):
+	a = 0
+	for k, v in texts.items():
+		distances = OrderedDict(sorted(v["distance"].items(), key=lambda item: item[0]))
+		matches = [m["match"] for m in [v for v in distances.values()]]
+		a += np.sum(matches[0:(i+1)])
+	offline_accuracy.append(a / len(texts))
+
+def offline_accuracy_plot():
+	plt.plot(range(len(ffms)), offline_accuracy)
 	plt.grid()
-	plt.xlabel(("In top n"))
+	plt.xlabel(("In top X"))
 	plt.ylabel(("Accuracy"))
 	plt.show(block=False)
 	input("Hit Enter To Close")
 	plt.close()
+
