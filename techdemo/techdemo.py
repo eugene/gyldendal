@@ -59,7 +59,7 @@ def suggest(text = None):
 		index = distances[i]
 		data = { 
 			"first": (i == list(distances.keys())[0]),
-			"score": "{0:.2f}".format(i), 
+			"score": "{0:.1f}%".format((1-i)*100), 
 			"faerdighed": ffms["faerdiheder"][index], 
 			"viden": ffms["viden"][index] 
 		}

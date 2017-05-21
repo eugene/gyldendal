@@ -36,11 +36,11 @@
     <!-- Begin page content -->
     <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
     	<div class="mt-3">
-    		<h2>Blah blah indtast det og det</h2>
+    		<h2>Learning object classifier<sup>beta</sup></h2>
     	</div>
 
     	<p class="lead">
-    		Værsgo' at taste teksten ind, resulterende FFM'er vil blive foreslået løbende &darr;
+            Enter your learning object summary below, the resulting academic goals will be suggested in real-time &darr;
 	    </p>
 
 	    <form>
@@ -64,18 +64,21 @@
 
     (function(){
     	var armed = false;
-    	var timeout = 2;
+    	var timeout = 1;
 
     	var update = function(val){
     		// console.log("update called. val is:", val)
     		$.ajax({
     			url: "/suggest",
     			method: "POST",
+                before: function(){
+                    $("#js-answer").html("Loading...");
+                },
     			data: {
     				text: val
     			},
     			success: function(ans){
-    				$("#js-answer").html(ans);
+    				$("#js-answer").html(ans).slideDown('fast');
     			}
     		});
     	};
