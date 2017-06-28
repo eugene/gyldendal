@@ -9,7 +9,7 @@ with open('34hist.json') as data_file:
     data = json.load(data_file)
 
 if not 'model' in vars():
-    model = fasttext.load_model('fasttext/wiki.da.bin')
+    model = fasttext.load_model('fastText/wiki.da.bin')
 
 færdighed = [
                 "Eleven kan placere elementer fra historien tidsmæssigt i forhold til hinanden",
@@ -71,12 +71,16 @@ predict_correct = []
 predict_correct2 = []
 #Test al data for top 1 præcision
 TOP = 8
+
+tester = []
 for i in range(len(data)):
     if correct[i] != -1:
         datapoint = data[str(i)]
         text = datapoint['text']
         mål = datapoint['færdighed']
-
+        #print(text)
+        #print(mål)
+        #print(' ')
         #Initialize array
         best = 1000
         dist_result = [ [], []  ]
@@ -95,6 +99,9 @@ for i in range(len(data)):
                 dist_result[0][index] = dist
                 dist_result[1][index] = færdighed[i2]
 
+            if mål == færdighed[i2]:
+                tester.append(i2)
+
 
         #print('Result = {}'.format(result))
         #print('Mål = {}'.format(mål))
@@ -108,8 +115,8 @@ for i in range(len(data)):
         else:
             predict_correct2.append(0)
 
-print('Accuracy(TOP1) = ', np.mean(predict_correct)*100,'%')
-print('Accuracy(TOP{}) = '.format(TOP), np.mean(predict_correct2)*100,'%')
+#print('Accuracy(TOP1) = ', np.mean(predict_correct)*100,'%')
+#print('Accuracy(TOP{}) = '.format(TOP), np.mean(predict_correct2)*100,'%')
 
 plotti = [42.5, 56.16, 68.49, 73.97, 83.56, 90.41, 95.89]
 plt.plot(list(range(1,len(plotti)+1)),plotti)
